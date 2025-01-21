@@ -43,7 +43,7 @@ struct ContentView: View {
                     }
                 }
                 
-                NavigationLink(destination: addNewTaskView(name: "", priority: .Middle, isFinished: true)) {
+                NavigationLink(destination: addNewTaskView(name: "", memo: "",  priority: .Middle, isFinished: true)) {
                     Label("Add Task", systemImage: "plus")
                 }
             }
@@ -75,10 +75,6 @@ struct ListCell: View {
     
     var body: some View {
         HStack{
-            Text("\(task.priority)" )
-            Spacer()
-            Text("\(task.name)")
-            Spacer()
             Button(action: {
                 if task.isFinished {
                     task.isFinished = false
@@ -88,13 +84,21 @@ struct ListCell: View {
             }) {
                 Text(Image(systemName: task.isFinished ?  "checkmark.square.fill" : "square"))
             }
+            //Spacer()
+            Text("\(task.priority)" )
+            Spacer()
+            Text("\(task.name)")
             
-            NavigationLink(destination: UpdateTaskView(task: task)) {
-                //Image(systemName: "square.and.pencil")
+            Spacer()
+            
+            
+            NavigationLink{
+                UpdateTaskView(task: task)
+            } label: {
+                Image(systemName: "square.and.pencil")
             }
+            
         }
-        
-        .labelsHidden()
     }
 }
 

@@ -11,9 +11,11 @@ import SwiftData
 struct addNewTaskView: View {
     @Environment(\.dismiss) var dismiss
     
-    @State var name: String
+    @State var name: String = ""
+    @State var memo: String = ""
     @State var priority: todoPriority = .Middle
     @State var isFinished: Bool = false
+    @State var deadline: Date = Date()
     
     @Environment(\.modelContext) private var modelContext
     
@@ -23,9 +25,8 @@ struct addNewTaskView: View {
                 .multilineTextAlignment(.center)
             
             Form{
-                Section(header: Text("New Task")) {
-                    
-                    TextField(text: $name, prompt: Text("Enter new task name")) {
+                
+                    TextField(text: $name, prompt: Text("New Task")) {
                         Text("Task")
                     }
                     
@@ -37,12 +38,32 @@ struct addNewTaskView: View {
                         Text("Priotity")
                     }
                     
+                    DatePicker(
+                        "DeadLine",
+                        selection:  $deadline,
+                        displayedComponents: [.date]
+                    )
+                    
                     Toggle("Finished", isOn: $isFinished)
+                
+               
+                let type = "Memo"
+                
+                ZStack(alignment: .topLeading, content: {
+                    if memo.isEmpty {
+                        Text(type)
+                            .foregroundStyle(Color.primary.opacity(0.25))
+                    }
+                    
+                    TextEditor(text: $memo)
+                        .frame(height: 200)
+                })
+                    
                 }
             }
             .toolbar {
                 Button("Save"){
-                    let task = todoTask(name: name, priority: priority, isFinished: isFinished)
+                    let task = todoTask(name: name, memo, priority: priority, isFinished: isFinished)
                     modelContext.insert(task)
                     do {
                         try modelContext.save()
@@ -51,19 +72,13 @@ struct addNewTaskView: View {
                     }
                     dismiss()//현재 화면을 dismiss 해서 이전 화면으로 돌아감
                 }
-//                ToolbarItem(placement: .navigationBarTrailing) {
-//                    NavigationLink(destination: ContentView(), label: {
-//                        Text("Save")
-//                })
-//                    .simultaneousGesture(TapGesture().onEnded{
-//                        modelContext.insert(newTask)
-//                    }) // 네비게이션 링크 버튼 탭 시 액션 추가
+
                 }
             }
         }
-    }
+    
 
 
 #Preview {
-    addNewTaskView(name: "", priority: .Middle, isFinished: false)
+    addNewTaskView(name: "", memo: "", priority: .Middle, isFinished: false, deadline: Date.now)
 }

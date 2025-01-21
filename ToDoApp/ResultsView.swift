@@ -35,6 +35,7 @@ struct ResultsView: View {
                 }
                 Spacer()
             }
+            
             List {
                 ForEach(matches) { task in
                     HStack {

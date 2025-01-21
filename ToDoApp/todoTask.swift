@@ -16,15 +16,19 @@ enum todoPriority : Codable {
 
 @Model
 final class todoTask {
-    var name: String
+    var name : String
     var priority : todoPriority 
     var isFinished : Bool
     var date : Date
+    var deadline : Date
+    var memo : String
     
-    init(name: String, priority: todoPriority = .Middle, isFinished: Bool = false ,_ date: Date = .now) {
+    init(name: String,_ memo: String = "", priority: todoPriority = .Middle, isFinished: Bool = false ,_ dedline: Date = .now , _ date: Date = .now) {
         self.name = name
+        self.memo = memo
         self.priority = priority
         self.isFinished = isFinished
+        self.deadline = dedline
         self.date = date
     }
 }
